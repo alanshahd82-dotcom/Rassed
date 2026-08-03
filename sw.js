@@ -1,8 +1,9 @@
-const CACHE_NAME = "rassed-shell-v2";
+const CACHE_NAME = "rassed-shell-v3";
 const APP_SHELL = [
   "./",
   "./index.html",
   "./styles.css",
+  "./theme-overrides.css",
   "./dataStore.js",
   "./app.js",
   "./manifest.webmanifest",

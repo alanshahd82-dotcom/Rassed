@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0f1f35" />
+    <meta name="color-scheme" content="light" />
     <meta name="description" content="راصد — منصة تشغيل وتتبع طلبات التجارة الإلكترونية للمغرب" />
     <meta name="mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -44,10 +45,12 @@
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="theme-overrides.css" />
   </head>
   <body>
+    <a class="skip-link" href="#view-container">تخطّي إلى المحتوى الرئيسي</a>
     <div id="toast-region" class="toast-region" aria-live="polite"></div>
 
     <section id="login-screen" class="login-screen">
@@ -77,10 +80,10 @@
           <p class="login-subtitle">سجّل الدخول للوصول إلى لوحة عملياتك.</p>
           <form id="login-form" class="login-form">
             <label for="workspace-email">البريد الإلكتروني</label>
-            <input id="workspace-email" type="email" value="ops@atlas-store.ma" required />
+            <input id="workspace-email" type="email" placeholder="ops@atlas-store.ma" autocomplete="email" required />
             <label for="workspace-password">كلمة المرور</label>
             <div class="password-wrap">
-              <input id="workspace-password" type="password" value="demo-rassed" required />
+              <input id="workspace-password" type="password" placeholder="أدخل كلمة المرور" autocomplete="current-password" required />
               <button id="password-toggle" type="button" class="input-action" aria-label="إظهار كلمة المرور">إظهار</button>
             </div>
             <div class="login-options">
@@ -197,6 +200,7 @@
         </div>
       </main>
     </div>
+    <button id="sidebar-backdrop" class="sidebar-backdrop hidden" aria-label="إغلاق القائمة"></button>
 
     <div id="order-modal" class="modal-backdrop hidden">
       <section class="modal order-modal" role="dialog" aria-modal="true" aria-labelledby="modal-order-title"><button class="modal-close" id="modal-close" aria-label="إغلاق">×</button><div id="order-modal-content"></div></section>

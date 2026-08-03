@@ -95,6 +95,7 @@
     if (view === "settings") renderSettings();
     if (view === "scan") setTimeout(startScanner, 100);
     $("#sidebar").classList.remove("open");
+    $("#sidebar-backdrop")?.classList.add("hidden");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
   function openOrder(barcode) {
@@ -216,8 +217,16 @@
     $("#logout-button").addEventListener("click", () => { $("#app-shell").classList.add("hidden"); $("#login-screen").classList.remove("hidden"); });
     $$(".nav-item").forEach((button) => button.addEventListener("click", () => showView(button.dataset.view)));
     $$("[data-view-target]").forEach((button) => button.addEventListener("click", () => showView(button.dataset.viewTarget)));
-    $("#sidebar-open").addEventListener("click", () => $("#sidebar").classList.add("open"));
-    $("#sidebar-close").addEventListener("click", () => $("#sidebar").classList.remove("open"));
+    $("#sidebar-open").addEventListener("click", () => {
+      $("#sidebar").classList.add("open");
+      $("#sidebar-backdrop")?.classList.remove("hidden");
+    });
+    const closeSidebar = () => {
+      $("#sidebar").classList.remove("open");
+      $("#sidebar-backdrop")?.classList.add("hidden");
+    };
+    $("#sidebar-close").addEventListener("click", closeSidebar);
+    $("#sidebar-backdrop")?.addEventListener("click", closeSidebar);
     $("#dashboard-search").addEventListener("input", renderDashboard);
     $$(".filter-pill[data-dashboard-filter]").forEach((button) => button.addEventListener("click", () => { state.dashboardFilter = button.dataset.dashboardFilter; $$(".filter-pill[data-dashboard-filter]").forEach((item) => item.classList.toggle("active", item === button)); renderDashboard(); }));
     $("#orders-search").addEventListener("input", renderOrders); $("#orders-status-filter").addEventListener("change", renderOrders); $("#orders-company-filter").addEventListener("change", renderOrders);
@@ -229,7 +238,7 @@
     $("#resolve-all-button").addEventListener("click", () => { store.getStuckOrders().forEach((order) => store.resolveAlert(order.barcode)); renderAll(); toast("تم تحديد كل التنبيهات كمُراجعة.", "success"); });
     $("#export-orders-button").addEventListener("click", () => exportCsv(store.exportRows(), "orders-2026-08-03.csv")); $("#export-all-button").addEventListener("click", () => exportCsv(store.exportRows(), "orders-2026-08-03.csv")); $("#export-report-button").addEventListener("click", () => exportCsv(store.getCompanyStats().map((c) => ({ company: c.name, totalOrders: c.total, delivered: c.delivered, returned: c.returned, deliveredRate: `${c.deliveredRate}%`, returnedRate: `${c.returnedRate}%` })), "performance-august-2026.csv"));
     document.addEventListener("click", (event) => { const orderButton = event.target.closest("[data-order]"); if (orderButton) openOrder(orderButton.dataset.order); const resolve = event.target.closest(".resolve-alert"); if (resolve) { store.resolveAlert(resolve.dataset.barcode); renderAll(); toast("تمت مراجعة الطلب.", "success"); } const scanTrigger = event.target.closest(".modal-scan-trigger"); if (scanTrigger) { closeModal(); showView("scan"); setScanMode("return"); } });
-    document.addEventListener("keydown", (event) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); showView("scan"); $("#manual-barcode").focus(); } if (event.key === "Escape") closeModal(); });
+    document.addEventListener("keydown", (event) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); showView("scan"); $("#manual-barcode").focus(); } if (event.key === "Escape") { closeModal(); closeSidebar(); } });
     $("#orders-company-filter").innerHTML = `<option value="all">كل شركات التوصيل</option>${store.getCompanies().map((company) => `<option value="${escapeHtml(company.name)}">${escapeHtml(company.name)}</option>`).join("")}`;
   }
   function startScanner() {
