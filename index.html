@@ -16,6 +16,31 @@
       .install-app-button{height:32px;border:1px solid #b7dfda;border-radius:7px;background:#e7f6f4;color:#087d72;font-size:10px;font-weight:800;padding:0 10px;display:inline-flex;align-items:center;gap:5px}
       .install-app-button:hover{background:#d6f0ed}
       .install-app-button span{font-size:16px;line-height:1}
+      .scan-mode-panel{margin-bottom:20px;padding:22px 24px;border-color:#dce7ed;box-shadow:0 10px 28px rgba(15,31,53,.06)}
+      .scan-mode-heading{display:flex;align-items:flex-start;justify-content:space-between;gap:15px}
+      .scan-mode-heading h2{font-size:16px;margin:0 0 4px;color:#0f1f35}
+      .scan-mode-heading p{font-size:11px;color:#7e8da0;margin:0}
+      .mode-required{font-size:9px;font-weight:800;color:#b66c08;background:#fff5e3;border:1px solid #f3dfb7;border-radius:20px;padding:6px 9px;white-space:nowrap}
+      .scan-modes{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+      .scan-mode{display:grid;grid-template-columns:40px 1fr auto;align-items:center;gap:12px;text-align:right;background:#fbfcfd;border:1px solid #e2e9ef;border-radius:10px;padding:14px 15px;color:#52677f;transition:.2s}
+      .scan-mode:hover{border-color:#98d5ce;background:#f7fcfb}
+      .scan-mode.active{border:2px solid #0d9488;background:#f0faf8;box-shadow:0 5px 15px rgba(13,148,136,.12);padding:13px 14px}
+      .scan-mode-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:9px;background:#e8eef7;color:#40678f;font-size:22px}
+      .scan-mode.active .scan-mode-icon{background:#d3f1ec;color:#087d72}
+      .return-mode-icon{background:#fbe9e9;color:#c33737}
+      .scan-mode.active .return-mode-icon{background:#fbe2e2;color:#c33737}
+      .scan-mode strong,.scan-mode small{display:block}
+      .scan-mode strong{font-size:12px;color:#10243c;margin-bottom:3px}
+      .scan-mode small{font-size:9px;color:#8796a7}
+      .mode-result{font-size:9px;color:#087d72;background:#dff4ef;border-radius:5px;padding:5px 7px;direction:rtl;white-space:nowrap}
+      .return-result{color:#c33737;background:#fbe5e5}
+      .mode-explanation{display:flex;align-items:center;gap:10px;border-top:1px solid #e9eef2;margin-top:18px;padding-top:14px;color:#65808b}
+      .mode-explanation-icon{width:22px;height:22px;display:grid;place-items:center;border-radius:50%;background:#dff4ef;color:#087d72;font-weight:800;font-size:12px;flex-shrink:0}
+      .mode-explanation p{font-size:10px;line-height:1.8;margin:0}
+      .mode-explanation strong{color:#087d72}
+      .status-pulse-success{background:#10b981;box-shadow:0 0 0 4px #10b9811c}
+      .status-pulse-error{background:#dc2626;box-shadow:0 0 0 4px #dc26261c}
+      @media(max-width:720px){.scan-mode-panel{padding:17px 15px}.scan-mode-heading{display:block}.mode-required{display:inline-block;margin-top:10px}.scan-modes{grid-template-columns:1fr;gap:8px}.scan-mode{grid-template-columns:36px 1fr auto}.scan-mode-icon{width:34px;height:34px}.mode-result{font-size:8px}}
     </style>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -143,8 +168,9 @@
           </section>
 
           <section id="view-scan" class="view">
-            <div class="page-heading"><div><p class="eyebrow">التشغيل</p><h1>مسح الباركود</h1><p class="page-description">امسح ملصق شركة التوصيل لتحديث حالة الطلب فورًا.</p></div><div class="scan-live-indicator"><span></span> الماسح جاهز</div></div>
-            <div class="scan-layout"><section class="panel scanner-panel"><div class="scanner-header"><div><h2>كاميرا الماسح</h2><p>وجّه الكاميرا نحو الباركود الموجود على ملصق الشحن</p></div><span class="camera-badge">● مباشر</span></div><div class="scanner-frame"><div id="reader"></div><div class="scanner-corners"></div><div class="scanner-guide">ضع الباركود داخل الإطار</div></div><div class="scan-status" id="scan-status"><span class="status-pulse"></span><span>في انتظار قراءة باركود...</span></div></section><section class="panel manual-scan-panel"><div class="panel-heading"><div><h2>إدخال يدوي</h2><p>لا تعمل الكاميرا؟ أدخل رقم الباركود.</p></div><span class="manual-icon">⌨</span></div><form id="manual-scan-form" class="manual-form"><label for="manual-barcode">رقم الباركود</label><div class="manual-input-row"><input id="manual-barcode" placeholder="مثال: AMN-2026-00847" autocomplete="off" /><button class="button button-primary" type="submit">بحث</button></div></form><div class="scan-rules"><h3>كيف يعمل راصد؟</h3><div class="rule"><span>01</span><p><strong>باركود جديد</strong><small>ينشئ طلبًا جديدًا بحالة Sorti.</small></p></div><div class="rule"><span>02</span><p><strong>طلب خارج</strong><small>اختر Livré أو Retour لتحديثه.</small></p></div><div class="rule"><span>03</span><p><strong>طلب مغلق</strong><small>يظهر تحذير لمنع التكرار.</small></p></div></div><div class="last-scan"><span class="last-scan-icon">✓</span><div><small>آخر مسح ناجح</small><strong id="last-scan-value">AMN-2026-00847</strong></div><span id="last-scan-time">منذ 4 دقائق</span></div></section></div>
+            <div class="page-heading"><div><p class="eyebrow">مركز التشغيل</p><h1>مسح الباركود</h1><p class="page-description">اختر العملية أولًا، وسيطبق راصد الحالة الصحيحة تلقائيًا.</p></div><div class="scan-live-indicator"><span></span> الماسح جاهز</div></div>
+            <section class="scan-mode-panel panel"><div class="scan-mode-heading"><div><h2>ما العملية التي ستنفذها؟</h2><p>هذا الاختيار يحدد ماذا يحدث للطلب بعد قراءة الباركود.</p></div><span class="mode-required">مطلوب قبل المسح</span></div><div class="scan-modes"><button class="scan-mode active" data-scan-mode="dispatch"><span class="scan-mode-icon">↗</span><span><strong>إرسال الطلبات</strong><small>تسليم الطلب لشركة التوصيل</small></span><b class="mode-result">النتيجة: Sorti</b></button><button class="scan-mode" data-scan-mode="return"><span class="scan-mode-icon return-mode-icon">↩</span><span><strong>استقبال المرتجعات</strong><small>استلام الطلب المرتجع من الناقل</small></span><b class="mode-result return-result">النتيجة: Retour</b></button></div><div class="mode-explanation" id="mode-explanation"><span class="mode-explanation-icon">i</span><p><strong>وضع إرسال الطلبات فعال</strong><br /><span>باركود جديد يُسجّل تلقائيًا كطلب خارج. الباركود المسجل مسبقًا يمنع التكرار.</span></p></div></section>
+            <div class="scan-layout"><section class="panel scanner-panel"><div class="scanner-header"><div><h2>كاميرا الماسح</h2><p>وجّه الكاميرا نحو باركود ملصق الشحن</p></div><span class="camera-badge">● مباشر</span></div><div class="scanner-frame"><div id="reader"></div><div class="scanner-corners"></div><div class="scanner-guide">ضع الباركود داخل الإطار</div></div><div class="scan-status" id="scan-status"><span class="status-pulse"></span><span>في انتظار قراءة باركود...</span></div></section><section class="panel manual-scan-panel"><div class="panel-heading"><div><h2>إدخال يدوي</h2><p>بديل سريع عند تعذر استخدام الكاميرا.</p></div><span class="manual-icon">⌨</span></div><form id="manual-scan-form" class="manual-form"><label for="manual-barcode">رقم الباركود</label><div class="manual-input-row"><input id="manual-barcode" placeholder="مثال: AMN-2026-00847" autocomplete="off" /><button class="button button-primary" type="submit">تنفيذ</button></div></form><div class="scan-rules"><h3>قواعد راصد</h3><div class="rule"><span>01</span><p><strong>إرسال</strong><small>باركود جديد ← ينشئ طلبًا بحالة Sorti.</small></p></div><div class="rule"><span>02</span><p><strong>مرتجع</strong><small>باركود Sorti ← يتحول إلى Retour.</small></p></div><div class="rule"><span>03</span><p><strong>حماية</strong><small>الطلبات المغلقة لا تقبل مسحًا مكررًا.</small></p></div></div><div class="last-scan"><span class="last-scan-icon">✓</span><div><small>آخر مسح ناجح</small><strong id="last-scan-value">—</strong></div><span id="last-scan-time">لا يوجد بعد</span></div></section></div>
           </section>
 
           <section id="view-analytics" class="view">
@@ -174,9 +200,6 @@
 
     <div id="order-modal" class="modal-backdrop hidden">
       <section class="modal order-modal" role="dialog" aria-modal="true" aria-labelledby="modal-order-title"><button class="modal-close" id="modal-close" aria-label="إغلاق">×</button><div id="order-modal-content"></div></section>
-    </div>
-    <div id="status-modal" class="modal-backdrop hidden">
-      <section class="modal status-modal" role="dialog" aria-modal="true"><div class="status-modal-icon">⌁</div><h2 id="status-modal-title">تحديث حالة الطلب</h2><p id="status-modal-copy">اختر الحالة الجديدة لهذا الطلب.</p><div class="status-choice-grid"><button class="status-choice delivered-choice" data-status-choice="Livré"><span>✓</span><strong>Livré</strong><small>تم التسليم</small></button><button class="status-choice return-choice" data-status-choice="Retour"><span>↩</span><strong>Retour</strong><small>مرتجع</small></button></div><button class="text-button modal-cancel" id="status-modal-cancel">إلغاء</button></section>
     </div>
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="dataStore.js"></script>
