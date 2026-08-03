@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f1f35" />
+    <meta name="description" content="راصد — منصة تشغيل وتتبع طلبات التجارة الإلكترونية للمغرب" />
+    <title>راصد | تتبع الطلبات</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div id="toast-region" class="toast-region" aria-live="polite"></div>
+
+    <section id="login-screen" class="login-screen">
+      <div class="login-art">
+        <div class="login-orbit orbit-one"></div>
+        <div class="login-orbit orbit-two"></div>
+        <div class="login-glow"></div>
+        <div class="brand brand-light">
+          <span class="brand-mark" aria-hidden="true"><i></i><b></b></span>
+          <span>راصد</span>
+        </div>
+        <div class="login-art-copy">
+          <p class="eyebrow light-eyebrow">تشغيل أذكى · تسليم أسرع</p>
+          <h1>كل طلب تحت<br /><em>رادارك.</em></h1>
+          <p>تابع دورة طلباتك من لحظة الخروج إلى التسليم أو الإرجاع، في مكان واحد واضح لفريقك.</p>
+        </div>
+        <div class="login-proof">
+          <span class="proof-dot"></span>
+          <span>بياناتك التشغيلية، بوضوح يومي</span>
+        </div>
+      </div>
+      <div class="login-panel">
+        <div class="login-panel-inner">
+          <div class="mobile-brand brand"><span class="brand-mark" aria-hidden="true"><i></i><b></b></span><span>راصد</span></div>
+          <p class="eyebrow">مساحة العمل</p>
+          <h2>مرحبًا بعودتك</h2>
+          <p class="login-subtitle">سجّل الدخول للوصول إلى لوحة عملياتك.</p>
+          <form id="login-form" class="login-form">
+            <label for="workspace-email">البريد الإلكتروني</label>
+            <input id="workspace-email" type="email" value="ops@atlas-store.ma" required />
+            <label for="workspace-password">كلمة المرور</label>
+            <div class="password-wrap">
+              <input id="workspace-password" type="password" value="demo-rassed" required />
+              <button id="password-toggle" type="button" class="input-action" aria-label="إظهار كلمة المرور">إظهار</button>
+            </div>
+            <div class="login-options">
+              <label class="checkbox-label"><input type="checkbox" checked /> تذكر هذا الجهاز</label>
+              <a href="#forgot" onclick="return false">نسيت كلمة المرور؟</a>
+            </div>
+            <button class="button button-primary button-large" type="submit">الدخول إلى مساحة العمل <span>←</span></button>
+          </form>
+          <div class="login-footer"><span class="secure-lock">⌁</span> مساحة عمل تجريبية آمنة · Atlas Store</div>
+        </div>
+      </div>
+    </section>
+
+    <div id="app-shell" class="app-shell hidden">
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-head">
+          <div class="brand"><span class="brand-mark" aria-hidden="true"><i></i><b></b></span><span>راصد</span></div>
+          <button id="sidebar-close" class="icon-button mobile-only" aria-label="إغلاق القائمة">×</button>
+        </div>
+        <div class="workspace-select">
+          <span class="workspace-avatar">A</span>
+          <span class="workspace-copy"><strong>Atlas Store</strong><small>المغرب · مساحة العمل</small></span>
+          <span class="chevron">⌄</span>
+        </div>
+        <nav class="main-nav" aria-label="التنقل الرئيسي">
+          <p class="nav-label">نظرة عامة</p>
+          <button class="nav-item active" data-view="dashboard"><span class="nav-icon">▦</span><span>لوحة التحكم</span></button>
+          <button class="nav-item" data-view="orders"><span class="nav-icon">☷</span><span>كل الطلبات</span><span class="nav-count" id="orders-nav-count">128</span></button>
+          <button class="nav-item" data-view="scan"><span class="nav-icon scan-icon">⌁</span><span>مسح الباركود</span><span class="nav-shortcut">⌘ K</span></button>
+          <p class="nav-label">التشغيل</p>
+          <button class="nav-item" data-view="analytics"><span class="nav-icon">◒</span><span>التحليلات</span></button>
+          <button class="nav-item" data-view="alerts"><span class="nav-icon">△</span><span>التنبيهات</span><span class="nav-alert-count" id="alerts-nav-count">12</span></button>
+          <button class="nav-item" data-view="reports"><span class="nav-icon">⇩</span><span>التقارير والتصدير</span></button>
+          <p class="nav-label">الإدارة</p>
+          <button class="nav-item" data-view="settings"><span class="nav-icon">⚙</span><span>الإعدادات</span></button>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="sync-status"><span class="sync-indicator"></span><span><strong>المزامنة مفعّلة</strong><small>آخر تحديث منذ 3 دقائق</small></span></div>
+          <div class="sidebar-user">
+            <span class="user-avatar">م</span>
+            <span><strong>مريم الإدريسي</strong><small>مديرة العمليات</small></span>
+            <button id="logout-button" class="logout-button" aria-label="تسجيل الخروج">↪</button>
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="topbar">
+          <button id="sidebar-open" class="icon-button mobile-only" aria-label="فتح القائمة">☰</button>
+          <div class="breadcrumbs"><span>مساحة العمل</span><b>/</b><strong id="breadcrumb-current">لوحة التحكم</strong></div>
+          <div class="topbar-actions">
+            <button class="icon-button help-button" title="المساعدة">?</button>
+            <button class="icon-button notification-button" id="notifications-button" title="التنبيهات"><span class="notification-dot"></span>♢</button>
+            <div class="topbar-divider"></div>
+            <button class="profile-chip"><span class="user-avatar small">م</span><span>مريم</span><span class="chevron">⌄</span></button>
+          </div>
+        </header>
+
+        <div id="view-container" class="view-container">
+          <section id="view-dashboard" class="view active-view">
+            <div class="page-heading">
+              <div><p class="eyebrow">الأحد، 03 أغسطس 2026</p><h1>صباح الخير، مريم <span class="heading-spark">✦</span></h1><p class="page-description">هذه صورة عملياتك اليوم. لديك <strong id="heading-alert-count">12 طلبًا</strong> تحتاج إلى انتباه.</p></div>
+              <button class="button button-primary" data-view-target="scan"><span class="button-icon">⌁</span> مسح طلب جديد</button>
+            </div>
+            <div class="stat-grid">
+              <article class="stat-card"><div class="stat-card-top"><span class="stat-label">الطلبات الخارجة اليوم</span><span class="stat-icon stat-icon-navy">↗</span></div><strong class="stat-value" id="stat-dispatched">34</strong><div class="stat-meta positive"><span>↑ 12.5%</span><small>مقارنة بالأمس</small></div></article>
+              <article class="stat-card"><div class="stat-card-top"><span class="stat-label">نسبة التسليم</span><span class="stat-icon stat-icon-teal">✓</span></div><strong class="stat-value" id="stat-delivered-rate">76.4%</strong><div class="stat-meta positive"><span>↑ 4.2%</span><small>مقارنة بالأسبوع الماضي</small></div></article>
+              <article class="stat-card"><div class="stat-card-top"><span class="stat-label">نسبة الإرجاع</span><span class="stat-icon stat-icon-red">↩</span></div><strong class="stat-value" id="stat-return-rate">8.6%</strong><div class="stat-meta negative"><span>↑ 1.1%</span><small>مقارنة بالأسبوع الماضي</small></div></article>
+              <article class="stat-card stat-card-alert"><div class="stat-card-top"><span class="stat-label">طلبات عالقة</span><span class="stat-icon stat-icon-amber">!</span></div><strong class="stat-value" id="stat-stuck">12</strong><div class="stat-meta warning"><span>تحتاج متابعة</span><small>منذ أكثر من 5 أيام</small></div></article>
+            </div>
+            <div class="content-grid dashboard-grid">
+              <section class="panel orders-panel">
+                <div class="panel-heading"><div><h2>آخر الطلبات</h2><p>تتبع فوري لحركة الطلبات</p></div><button class="text-button" data-view-target="orders">عرض الكل <span>←</span></button></div>
+                <div class="table-toolbar"><div class="search-box"><span>⌕</span><input id="dashboard-search" type="search" placeholder="ابحث بالباركود..." /></div><div class="filter-pills"><button class="filter-pill active" data-dashboard-filter="all">الكل</button><button class="filter-pill" data-dashboard-filter="Sorti">Sorti <span id="sorti-count">0</span></button><button class="filter-pill" data-dashboard-filter="Livré">Livré</button><button class="filter-pill" data-dashboard-filter="Retour">Retour</button></div><button class="icon-button filter-button" title="تصفية">≡</button></div>
+                <div class="table-scroll"><table class="orders-table"><thead><tr><th>الطلب / الباركود</th><th>تاريخ الخروج <span class="sort-mark">↕</span></th><th>الحالة</th><th>المدة</th><th>شركة التوصيل</th><th></th></tr></thead><tbody id="dashboard-orders-body"></tbody></table></div>
+              </section>
+              <section class="panel quick-panel"><div class="panel-heading"><div><h2>ملخص الأداء</h2><p>حسب شركة التوصيل</p></div><button class="icon-button" data-view-target="analytics">↗</button></div><div id="company-summary" class="company-summary"></div><div class="panel-divider"></div><div class="mini-insight"><span class="insight-icon">✦</span><div><strong>ملاحظة ذكية</strong><p id="smart-insight">Amana تحقق أفضل نسبة تسليم هذا الشهر.</p></div></div></section>
+            </div>
+          </section>
+
+          <section id="view-orders" class="view">
+            <div class="page-heading"><div><p class="eyebrow">التشغيل</p><h1>كل الطلبات</h1><p class="page-description">إدارة ومراجعة كل الطلبات في مساحة العمل.</p></div><button class="button button-primary" data-view-target="scan"><span class="button-icon">⌁</span> مسح طلب جديد</button></div>
+            <section class="panel full-panel"><div class="panel-heading"><div><h2>سجل الطلبات <span class="heading-count" id="all-orders-count">128</span></h2><p>آخر تحديث تلقائيًا</p></div><button class="button button-secondary" id="export-orders-button">⇩ تصدير CSV</button></div><div class="orders-controls"><div class="search-box wide-search"><span>⌕</span><input id="orders-search" type="search" placeholder="ابحث بالباركود أو شركة التوصيل..." /></div><select id="orders-status-filter" class="select-control"><option value="all">كل الحالات</option><option value="Sorti">Sorti · خارج</option><option value="Livré">Livré · تم التسليم</option><option value="Retour">Retour · مرتجع</option></select><select id="orders-company-filter" class="select-control"><option value="all">كل شركات التوصيل</option></select><button class="button button-ghost" id="reset-filters">إعادة ضبط</button></div><div class="table-scroll"><table class="orders-table orders-table-large"><thead><tr><th>الطلب / الباركود</th><th>تاريخ الخروج <span class="sort-mark">↕</span></th><th>الحالة</th><th>المدة</th><th>شركة التوصيل</th><th>آخر تحديث</th><th></th></tr></thead><tbody id="all-orders-body"></tbody></table></div><div class="table-footer"><span id="orders-result-count">عرض 128 طلبًا</span><div class="pagination"><button class="page-button active">1</button><button class="page-button">2</button><button class="page-button">3</button><span>…</span><button class="page-button">12</button></div></div></section>
+          </section>
+
+          <section id="view-scan" class="view">
+            <div class="page-heading"><div><p class="eyebrow">التشغيل</p><h1>مسح الباركود</h1><p class="page-description">امسح ملصق شركة التوصيل لتحديث حالة الطلب فورًا.</p></div><div class="scan-live-indicator"><span></span> الماسح جاهز</div></div>
+            <div class="scan-layout"><section class="panel scanner-panel"><div class="scanner-header"><div><h2>كاميرا الماسح</h2><p>وجّه الكاميرا نحو الباركود الموجود على ملصق الشحن</p></div><span class="camera-badge">● مباشر</span></div><div class="scanner-frame"><div id="reader"></div><div class="scanner-corners"></div><div class="scanner-guide">ضع الباركود داخل الإطار</div></div><div class="scan-status" id="scan-status"><span class="status-pulse"></span><span>في انتظار قراءة باركود...</span></div></section><section class="panel manual-scan-panel"><div class="panel-heading"><div><h2>إدخال يدوي</h2><p>لا تعمل الكاميرا؟ أدخل رقم الباركود.</p></div><span class="manual-icon">⌨</span></div><form id="manual-scan-form" class="manual-form"><label for="manual-barcode">رقم الباركود</label><div class="manual-input-row"><input id="manual-barcode" placeholder="مثال: AMN-2026-00847" autocomplete="off" /><button class="button button-primary" type="submit">بحث</button></div></form><div class="scan-rules"><h3>كيف يعمل راصد؟</h3><div class="rule"><span>01</span><p><strong>باركود جديد</strong><small>ينشئ طلبًا جديدًا بحالة Sorti.</small></p></div><div class="rule"><span>02</span><p><strong>طلب خارج</strong><small>اختر Livré أو Retour لتحديثه.</small></p></div><div class="rule"><span>03</span><p><strong>طلب مغلق</strong><small>يظهر تحذير لمنع التكرار.</small></p></div></div><div class="last-scan"><span class="last-scan-icon">✓</span><div><small>آخر مسح ناجح</small><strong id="last-scan-value">AMN-2026-00847</strong></div><span id="last-scan-time">منذ 4 دقائق</span></div></section></div>
+          </section>
+
+          <section id="view-analytics" class="view">
+            <div class="page-heading"><div><p class="eyebrow">التشغيل</p><h1>التحليلات</h1><p class="page-description">افهم أداء التوصيل واتخذ قرارات أسرع.</p></div><select class="date-select"><option>آخر 30 يومًا</option><option>آخر 7 أيام</option><option>هذا الشهر</option></select></div>
+            <div class="analytics-stat-row"><div class="analytics-stat"><span>إجمالي الطلبات</span><strong id="analytics-total">—</strong><small class="positive">↑ 18.2%</small></div><div class="analytics-stat"><span>متوسط التسليم</span><strong>2.4 <small>يوم</small></strong><small class="positive">↓ 0.6 يوم</small></div><div class="analytics-stat"><span>أعلى شركة أداءً</span><strong class="text-teal">Amana</strong><small>83.4% تسليم</small></div><div class="analytics-stat"><span>أعلى نسبة إرجاع</span><strong class="text-red">Ozone</strong><small>12.1% من الطلبات</small></div></div>
+            <div class="content-grid analytics-grid"><section class="panel chart-panel"><div class="panel-heading"><div><h2>نسبة التسليم والإرجاع</h2><p>تغير الأداء خلال آخر 30 يومًا</p></div><div class="chart-legend"><span><i class="legend-teal"></i> Livré</span><span><i class="legend-red"></i> Retour</span></div></div><div class="line-chart-wrap"><svg id="performance-chart" viewBox="0 0 760 300" preserveAspectRatio="none" role="img" aria-label="مخطط نسبة التسليم والإرجاع"></svg><div class="chart-axis"><span>05 يوليو</span><span>12 يوليو</span><span>19 يوليو</span><span>26 يوليو</span><span>03 أغسطس</span></div></div></section><section class="panel company-chart-panel"><div class="panel-heading"><div><h2>أداء الشركات</h2><p>نسبة التسليم حسب الناقل</p></div></div><div id="company-chart" class="company-chart"></div></section></div>
+          </section>
+
+          <section id="view-alerts" class="view">
+            <div class="page-heading"><div><p class="eyebrow">التشغيل</p><h1>التنبيهات <span class="heading-count alert-heading-count" id="alerts-heading-count">12</span></h1><p class="page-description">طلبات تحتاج إلى متابعة قبل أن تصبح مشكلة.</p></div><button class="button button-secondary" id="resolve-all-button">✓ تحديد الكل كمُراجع</button></div>
+            <div class="alert-banner"><span class="alert-banner-icon">!</span><div><strong>لديك طلبات عالقة</strong><p>هذه الطلبات تجاوزت حد <b id="alert-threshold-copy">5 أيام</b> بدون تحديث. راجعها أو تواصل مع شركة التوصيل.</p></div><button data-view-target="settings" class="text-button">تغيير الحد ←</button></div>
+            <section class="panel full-panel"><div class="panel-heading"><div><h2>تحتاج إلى إجراء</h2><p id="alert-list-subtitle">12 طلبًا تجاوزت مدة الانتظار</p></div><div class="alert-filters"><button class="filter-pill active">الكل</button><button class="filter-pill">الأقدم أولًا</button></div></div><div id="alerts-list" class="alerts-list"></div></section>
+          </section>
+
+          <section id="view-settings" class="view">
+            <div class="page-heading"><div><p class="eyebrow">الإدارة</p><h1>الإعدادات</h1><p class="page-description">خصّص مساحة العمل وطريقة تشغيل فريقك.</p></div><button class="button button-primary" id="save-settings-button">حفظ التغييرات</button></div>
+            <div class="settings-layout"><div class="settings-nav"><button class="settings-tab active">مساحة العمل</button><button class="settings-tab">شركات التوصيل</button><button class="settings-tab">المزامنة</button><button class="settings-tab">الفريق والصلاحيات</button></div><div class="settings-content"><section class="panel settings-section"><div class="settings-section-heading"><div><h2>تنبيهات الطلبات العالقة</h2><p>حدد متى يعتبر الطلب بحاجة إلى متابعة.</p></div><span class="settings-section-icon">△</span></div><div class="setting-row"><div><strong>حد الطلب العالق</strong><small>أرسل تنبيهًا عندما يبقى الطلب في حالة Sorti لهذه المدة.</small></div><div class="threshold-control"><input id="stuck-threshold" type="number" min="1" max="30" value="5" /><span>أيام</span></div></div></section><section class="panel settings-section"><div class="settings-section-heading"><div><h2>شركات التوصيل</h2><p>الشركات المستخدمة في مساحة العمل.</p></div><button class="button button-ghost" id="add-company-button">+ إضافة شركة</button></div><div id="settings-companies" class="settings-companies"></div></section><section class="panel settings-section sheets-section"><div class="settings-section-heading"><div><h2>مزامنة Google Sheets</h2><p>احتفظ ببيانات الطلبات متزامنة مع جدولك.</p></div><span class="connection-status"><i></i> جاهز للربط</span></div><div class="sheets-connect"><div class="sheets-logo">▤</div><div><strong>Google Sheets</strong><p>هذه المساحة جاهزة لإضافة اتصال Google Sheets عند تفعيل الحساب الحقيقي.</p></div><button class="button button-secondary" onclick="window.RassedApp.toast('سيتم تفعيل الربط في النسخة المتصلة بـ Google Sheets.', 'info')">إعداد الاتصال</button></div></section></div></div>
+          </section>
+
+          <section id="view-reports" class="view">
+            <div class="page-heading"><div><p class="eyebrow">الإدارة</p><h1>التقارير والتصدير</h1><p class="page-description">صدّر بياناتك وشارك صورة واضحة عن أداء التوصيل.</p></div></div>
+            <div class="reports-grid"><section class="panel export-card"><span class="report-icon teal">⇩</span><h2>تصدير كل الطلبات</h2><p>ملف CSV شامل بكل الطلبات، الحالات، التواريخ وشركات التوصيل.</p><button class="button button-primary" id="export-all-button">تحميل ملف CSV <span>↓</span></button><small>يتم إنشاء الملف على جهازك مباشرة</small></section><section class="panel export-card"><span class="report-icon navy">▥</span><h2>تقرير الأداء الشهري</h2><p>ملخص مرئي لنسب التسليم والإرجاع وأداء كل شركة توصيل.</p><button class="button button-secondary" id="export-report-button">تصدير تقرير الأداء <span>↓</span></button><small>متاح بصيغة CSV</small></section><section class="panel report-history"><div class="panel-heading"><div><h2>التصديرات الأخيرة</h2><p>سجل الملفات التي تم إنشاؤها</p></div></div><div class="history-item"><span class="file-icon">CSV</span><div><strong>orders-2026-08-03.csv</strong><small>128 طلبًا · منذ 6 دقائق</small></div><button class="icon-button">↓</button></div><div class="history-item"><span class="file-icon">CSV</span><div><strong>performance-july-2026.csv</strong><small>تقرير الأداء · 01 أغسطس</small></div><button class="icon-button">↓</button></div></section></div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <div id="order-modal" class="modal-backdrop hidden">
+      <section class="modal order-modal" role="dialog" aria-modal="true" aria-labelledby="modal-order-title"><button class="modal-close" id="modal-close" aria-label="إغلاق">×</button><div id="order-modal-content"></div></section>
+    </div>
+    <div id="status-modal" class="modal-backdrop hidden">
+      <section class="modal status-modal" role="dialog" aria-modal="true"><div class="status-modal-icon">⌁</div><h2 id="status-modal-title">تحديث حالة الطلب</h2><p id="status-modal-copy">اختر الحالة الجديدة لهذا الطلب.</p><div class="status-choice-grid"><button class="status-choice delivered-choice" data-status-choice="Livré"><span>✓</span><strong>Livré</strong><small>تم التسليم</small></button><button class="status-choice return-choice" data-status-choice="Retour"><span>↩</span><strong>Retour</strong><small>مرتجع</small></button></div><button class="text-button modal-cancel" id="status-modal-cancel">إلغاء</button></section>
+    </div>
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <script src="dataStore.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
