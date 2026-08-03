@@ -5,7 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0f1f35" />
     <meta name="description" content="راصد — منصة تشغيل وتتبع طلبات التجارة الإلكترونية للمغرب" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="راصد" />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="apple-touch-icon" href="./icons/icon-192.png" />
     <title>راصد | تتبع الطلبات</title>
+    <style>
+      .install-app-button{height:32px;border:1px solid #b7dfda;border-radius:7px;background:#e7f6f4;color:#087d72;font-size:10px;font-weight:800;padding:0 10px;display:inline-flex;align-items:center;gap:5px}
+      .install-app-button:hover{background:#d6f0ed}
+      .install-app-button span{font-size:16px;line-height:1}
+    </style>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -96,6 +107,7 @@
           <button id="sidebar-open" class="icon-button mobile-only" aria-label="فتح القائمة">☰</button>
           <div class="breadcrumbs"><span>مساحة العمل</span><b>/</b><strong id="breadcrumb-current">لوحة التحكم</strong></div>
           <div class="topbar-actions">
+            <button class="install-app-button hidden" id="install-button" title="تثبيت راصد على الهاتف"><span>↓</span> تثبيت التطبيق</button>
             <button class="icon-button help-button" title="المساعدة">?</button>
             <button class="icon-button notification-button" id="notifications-button" title="التنبيهات"><span class="notification-dot"></span>♢</button>
             <div class="topbar-divider"></div>
