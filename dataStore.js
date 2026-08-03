@@ -77,6 +77,20 @@
     orderList.unshift(order);
     return { order: cloneOrder(order), created: true };
   }
+  function scanOrder(barcode, mode) {
+    const cleanBarcode = String(barcode).trim().toUpperCase();
+    if (!cleanBarcode) return { ok: false, type: "invalid" };
+    const existing = findOrder(cleanBarcode);
+    if (mode === "return") {
+      if (!existing) return { ok: false, type: "not-found", barcode: cleanBarcode };
+      if (existing.status !== "Sorti") return { ok: false, type: "closed", order: cloneOrder(existing) };
+      const order = updateOrderStatus(cleanBarcode, "Retour", "تم استلام المرتجع من شركة التوصيل");
+      return { ok: true, type: "returned", order };
+    }
+    if (existing) return { ok: false, type: existing.status === "Sorti" ? "duplicate" : "closed", order: cloneOrder(existing) };
+    const result = addOrder(cleanBarcode);
+    return { ok: true, type: "dispatched", order: result.order };
+  }
   function updateOrderStatus(barcode, nextStatus, note) {
     const order = findOrder(barcode);
     if (!order) return null;
@@ -122,5 +136,5 @@
     return orderList.map((order) => ({ barcode: order.barcode, status: order.status, dispatchDate: order.dispatchDate.toISOString().slice(0, 10), deliveryCompany: order.deliveryCompany, city: order.city, daysInStatus: getDaysInStatus(order), lastUpdated: order.lastUpdated.toISOString().slice(0, 16).replace("T", " "), notes: order.note }));
   }
 
-  global.RassedStore = { getOrders, findOrder: (barcode) => { const order = findOrder(barcode); return order ? cloneOrder(order) : null; }, addOrder, updateOrderStatus, resolveAlert, getStuckOrders, getDaysInStatus, getCompanies, getThreshold, setThreshold, getStats, getCompanyStats, exportRows };
+  global.RassedStore = { getOrders, findOrder: (barcode) => { const order = findOrder(barcode); return order ? cloneOrder(order) : null; }, addOrder, scanOrder, updateOrderStatus, resolveAlert, getStuckOrders, getDaysInStatus, getCompanies, getThreshold, setThreshold, getStats, getCompanyStats, exportRows };
 })(window);
