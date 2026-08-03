@@ -43,6 +43,7 @@
     $("#stat-stuck").textContent = stats.stuck;
     $("#orders-nav-count").textContent = stats.total;
     $("#alerts-nav-count").textContent = stats.stuck;
+    window.RassedMobileShell?.syncMobileCounts();
     $("#heading-alert-count").textContent = `${stats.stuck} طلبًا`;
     $("#sorti-count").textContent = store.getOrders({ status: "Sorti" }).length;
     const orders = store.getOrders({ status: state.dashboardFilter === "all" ? undefined : state.dashboardFilter, search: $("#dashboard-search")?.value });
@@ -88,6 +89,7 @@
     $$(".view").forEach((section) => section.classList.toggle("active-view", section.id === `view-${view}`));
     $$(".nav-item").forEach((item) => item.classList.toggle("active", item.dataset.view === view));
     $("#breadcrumb-current").textContent = labels[view];
+    window.RassedMobileShell?.syncMobileActive(view);
     if (view === "dashboard") renderDashboard();
     if (view === "orders") renderOrders();
     if (view === "alerts") renderAlerts();
@@ -212,9 +214,9 @@
     }
   }
   function bindEvents() {
-    $("#login-form").addEventListener("submit", (event) => { event.preventDefault(); $("#login-screen").classList.add("hidden"); $("#app-shell").classList.remove("hidden"); showView("dashboard"); toast("مرحبًا بك في مساحة عمل Atlas Store.", "success"); });
+    $("#login-form").addEventListener("submit", (event) => { event.preventDefault(); $("#login-screen").classList.add("hidden"); $("#app-shell").classList.remove("hidden"); $(".mobile-bottom-nav")?.classList.remove("hidden"); showView("dashboard"); toast("مرحبًا بك في مساحة عمل Atlas Store.", "success"); });
     $("#password-toggle").addEventListener("click", () => { const input = $("#workspace-password"); input.type = input.type === "password" ? "text" : "password"; $("#password-toggle").textContent = input.type === "password" ? "إظهار" : "إخفاء"; });
-    $("#logout-button").addEventListener("click", () => { $("#app-shell").classList.add("hidden"); $("#login-screen").classList.remove("hidden"); });
+    $("#logout-button").addEventListener("click", () => { $("#app-shell").classList.add("hidden"); $("#login-screen").classList.remove("hidden"); $(".mobile-bottom-nav")?.classList.add("hidden"); });
     $$(".nav-item").forEach((button) => button.addEventListener("click", () => showView(button.dataset.view)));
     $$("[data-view-target]").forEach((button) => button.addEventListener("click", () => showView(button.dataset.viewTarget)));
     $("#sidebar-open").addEventListener("click", () => {
@@ -249,6 +251,6 @@
     } catch (error) { updateScanStatus("تعذر تشغيل الكاميرا — استخدم الإدخال اليدوي", "error"); }
   }
   function renderAll() { renderDashboard(); renderOrders(); renderAlerts(); renderAnalytics(); renderSettings(); }
-  window.RassedApp = { toast, processScan };
+  window.RassedApp = { toast, processScan, showView };
   setupPwaInstall(); bindEvents(); renderAll();
 })();

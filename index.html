@@ -49,6 +49,7 @@
     <link rel="stylesheet" href="styles.css" />
     <link rel="stylesheet" href="theme-overrides.css" />
     <link rel="stylesheet" href="redesign.css" />
+    <link rel="stylesheet" href="app-shell.css" />
   </head>
   <body>
     <a class="skip-link" href="#view-container">تخطّي إلى المحتوى الرئيسي</a>
@@ -201,6 +202,13 @@
         </div>
       </main>
     </div>
+    <nav class="mobile-bottom-nav hidden" aria-label="تنقل التطبيق">
+      <button class="mobile-nav-item active" data-view="dashboard"><span class="mobile-nav-icon">⌂</span><span>الرئيسية</span></button>
+      <button class="mobile-nav-item" data-view="orders"><span class="mobile-nav-icon">▤</span><span>الطلبات</span><b id="mobile-orders-count">128</b></button>
+      <button class="mobile-nav-scan" data-view="scan" aria-label="مسح طلب جديد"><span>⌁</span></button>
+      <button class="mobile-nav-item" data-view="alerts"><span class="mobile-nav-icon">△</span><span>تنبيهات</span><b id="mobile-alerts-count">12</b></button>
+      <button class="mobile-nav-item" data-view="settings"><span class="mobile-nav-icon">☰</span><span>المزيد</span></button>
+    </nav>
     <button id="sidebar-backdrop" class="sidebar-backdrop hidden" aria-label="إغلاق القائمة"></button>
 
     <div id="order-modal" class="modal-backdrop hidden">
@@ -209,5 +217,6 @@
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
     <script src="dataStore.js"></script>
     <script src="app.js"></script>
+    <script src="app-mobile-shell.js"></script>
   </body>
 </html>
