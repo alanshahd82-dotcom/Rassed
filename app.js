@@ -1,6 +1,6 @@
 (function () {
   const store = window.RassedStore;
-  const state = { currentView: "dashboard", dashboardFilter: "all", scanner: null, pendingBarcode: null };
+  const state = { currentView: "dashboard", dashboardFilter: "all", scanMode: "dispatch", scanner: null, pendingBarcode: null, lastScanned: "", lastScannedAt: 0 };
   const labels = { dashboard: "لوحة التحكم", orders: "كل الطلبات", scan: "مسح الباركود", analytics: "التحليلات", alerts: "التنبيهات", settings: "الإعدادات", reports: "التقارير والتصدير" };
   const $ = (selector, parent = document) => parent.querySelector(selector);
   const $$ = (selector, parent = document) => [...parent.querySelectorAll(selector)];
@@ -93,6 +93,7 @@
     if (view === "alerts") renderAlerts();
     if (view === "analytics") renderAnalytics();
     if (view === "settings") renderSettings();
+    if (view === "scan") setTimeout(startScanner, 100);
     $("#sidebar").classList.remove("open");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -100,35 +101,61 @@
     const order = store.findOrder(barcode);
     if (!order) return toast("لم يتم العثور على الطلب.", "error");
     const days = store.getDaysInStatus(order);
-    $("#order-modal-content").innerHTML = `<div class="modal-kicker">${statusBadge(order.status)} <span>طلب ${escapeHtml(order.barcode)}</span></div><h2 id="modal-order-title">${escapeHtml(order.barcode)}</h2><p class="modal-subtitle">${companyLogo(order.deliveryCompany)} ${escapeHtml(order.deliveryCompany)} · ${escapeHtml(order.city)}</p><div class="modal-summary"><div><span>تاريخ الخروج</span><strong>${formatDate(order.dispatchDate)}</strong></div><div><span>المدة الحالية</span><strong>${days} ${days === 1 ? "يوم" : "أيام"}</strong></div><div><span>آخر تحديث</span><strong>${formatDate(order.lastUpdated)}</strong></div></div><div class="timeline"><h3>سجل الحالة</h3>${order.statusHistory.map((event, index) => `<div class="timeline-item ${index === order.statusHistory.length - 1 ? "current" : ""}"><span class="timeline-dot"></span><div><strong>${event.status === "Sorti" ? "Sorti · خرج للتوصيل" : event.status === "Livré" ? "Livré · تم التسليم" : "Retour · تم الإرجاع"}</strong><small>${formatDate(event.timestamp)} · ${formatTime(event.timestamp)}</small><p>${escapeHtml(event.note || "")}</p></div></div>`).join("")}</div><div class="modal-note"><label>ملاحظات الطلب</label><textarea placeholder="أضف ملاحظة لفريقك...">${escapeHtml(order.note || "")}</textarea></div>${order.status === "Sorti" ? `<button class="button button-primary button-full modal-status-trigger" data-barcode="${escapeHtml(order.barcode)}">تحديث الحالة</button>` : ""}`;
+    $("#order-modal-content").innerHTML = `<div class="modal-kicker">${statusBadge(order.status)} <span>طلب ${escapeHtml(order.barcode)}</span></div><h2 id="modal-order-title">${escapeHtml(order.barcode)}</h2><p class="modal-subtitle">${companyLogo(order.deliveryCompany)} ${escapeHtml(order.deliveryCompany)} · ${escapeHtml(order.city)}</p><div class="modal-summary"><div><span>تاريخ الخروج</span><strong>${formatDate(order.dispatchDate)}</strong></div><div><span>المدة الحالية</span><strong>${days} ${days === 1 ? "يوم" : "أيام"}</strong></div><div><span>آخر تحديث</span><strong>${formatDate(order.lastUpdated)}</strong></div></div><div class="timeline"><h3>سجل الحالة</h3>${order.statusHistory.map((event, index) => `<div class="timeline-item ${index === order.statusHistory.length - 1 ? "current" : ""}"><span class="timeline-dot"></span><div><strong>${event.status === "Sorti" ? "Sorti · خرج للتوصيل" : event.status === "Livré" ? "Livré · تم التسليم" : "Retour · تم الإرجاع"}</strong><small>${formatDate(event.timestamp)} · ${formatTime(event.timestamp)}</small><p>${escapeHtml(event.note || "")}</p></div></div>`).join("")}</div><div class="modal-note"><label>ملاحظات الطلب</label><textarea placeholder="أضف ملاحظة لفريقك...">${escapeHtml(order.note || "")}</textarea></div>${order.status === "Sorti" ? `<button class="button button-primary button-full modal-scan-trigger" data-barcode="${escapeHtml(order.barcode)}">مسح هذا الطلب كمرتجع</button>` : ""}`;
     $("#order-modal").classList.remove("hidden");
   }
-  function closeModal() { $("#order-modal").classList.add("hidden"); $("#status-modal").classList.add("hidden"); }
-  function processScan(barcode) {
+  function closeModal() { $("#order-modal").classList.add("hidden"); }
+  function updateScanStatus(message, type = "ready") {
+    const status = $("#scan-status");
+    if (!status) return;
+    const pulseClass = type === "error" ? "status-pulse status-pulse-error" : type === "success" ? "status-pulse status-pulse-success" : "status-pulse";
+    status.innerHTML = `<span class="${pulseClass}"></span><span>${escapeHtml(message)}</span>`;
+  }
+  function processScan(barcode, mode = state.scanMode) {
     const clean = String(barcode).trim().toUpperCase();
     if (!clean) return toast("أدخل رقم الباركود أولًا.", "error");
-    const existing = store.findOrder(clean);
-    if (!existing) {
-      const result = store.addOrder(clean);
+    const now = Date.now();
+    if (clean === state.lastScanned && now - state.lastScannedAt < 2500) return;
+    state.lastScanned = clean;
+    state.lastScannedAt = now;
+    const result = store.scanOrder(clean, mode);
+    if (result.ok) {
       $("#last-scan-value").textContent = result.order.barcode;
       $("#last-scan-time").textContent = "الآن";
-      toast(`تم إنشاء ${clean} بحالة Sorti.`, "success");
-      showView("orders");
-      openOrder(clean);
+      if (result.type === "dispatched") {
+        updateScanStatus(`${clean} تم تسجيله كطلب خارج · Sorti`, "success");
+        toast(`تم إرسال ${clean} إلى شركة التوصيل. الحالة: Sorti.`, "success");
+      } else {
+        updateScanStatus(`${clean} تم تسجيله كمرتجع · Retour`, "success");
+        toast(`تم تسجيل استلام المرتجع ${clean}.`, "success");
+      }
+      renderAll();
       return;
     }
-    $("#last-scan-value").textContent = existing.barcode;
-    $("#last-scan-time").textContent = "الآن";
-    if (existing.status === "Sorti") {
-      state.pendingBarcode = existing.barcode;
-      $("#status-modal-title").textContent = "تحديث حالة الطلب";
-      $("#status-modal-copy").textContent = `${existing.barcode} في حالة Sorti. اختر النتيجة بعد التوصيل.`;
-      $("#status-modal").classList.remove("hidden");
-    } else {
-      toast(`هذا الطلب مغلق بالفعل بحالة ${existing.status}. لا يمكن تحديثه مرة أخرى.`, "warning");
+    const existing = result.order;
+    if (result.type === "not-found") {
+      updateScanStatus(`لم يتم العثور على ${clean} ضمن الطلبات المرسلة`, "error");
+      toast("لا يمكن تسجيل مرتجع لباركود غير موجود. أرسل الطلب أولًا.", "error");
+    } else if (result.type === "duplicate") {
+      updateScanStatus(`${clean} مسجل مسبقًا كـ Sorti — لم يتم التكرار`, "error");
+      toast("هذا الطلب مسجل مسبقًا كخارج. لم يتم احتساب المسح مرة ثانية.", "warning");
+    } else if (result.type === "closed") {
+      updateScanStatus(`${clean} مغلق بحالة ${existing.status} — لا تعديل`, "error");
+      toast(`هذا الطلب مغلق بالفعل بحالة ${existing.status}. لا يمكن تغييره.`, "warning");
     }
+    $("#last-scan-value").textContent = clean;
+    $("#last-scan-time").textContent = "الآن";
     renderDashboard();
     renderAlerts();
+  }
+  function setScanMode(mode) {
+    state.scanMode = mode;
+    $$(".scan-mode").forEach((button) => button.classList.toggle("active", button.dataset.scanMode === mode));
+    const explanation = $("#mode-explanation");
+    if (!explanation) return;
+    const isReturn = mode === "return";
+    explanation.innerHTML = `<span class="mode-explanation-icon">${isReturn ? "↩" : "i"}</span><p><strong>${isReturn ? "وضع استقبال المرتجعات فعال" : "وضع إرسال الطلبات فعال"}</strong><br /><span>${isReturn ? "لا يُقبل إلا باركود موجود بحالة Sorti، وسيتم تحويله مباشرة إلى Retour." : "باركود جديد يُسجّل تلقائيًا كطلب خارج. الباركود المسجل مسبقًا يمنع التكرار."}</span></p>`;
+    updateScanStatus(isReturn ? "في انتظار باركود مرتجع..." : "في انتظار باركود للإرسال...", "ready");
   }
   function exportCsv(rows, filename) {
     const headers = Object.keys(rows[0] || {});
@@ -195,13 +222,13 @@
     $$(".filter-pill[data-dashboard-filter]").forEach((button) => button.addEventListener("click", () => { state.dashboardFilter = button.dataset.dashboardFilter; $$(".filter-pill[data-dashboard-filter]").forEach((item) => item.classList.toggle("active", item === button)); renderDashboard(); }));
     $("#orders-search").addEventListener("input", renderOrders); $("#orders-status-filter").addEventListener("change", renderOrders); $("#orders-company-filter").addEventListener("change", renderOrders);
     $("#reset-filters").addEventListener("click", () => { $("#orders-search").value = ""; $("#orders-status-filter").value = "all"; $("#orders-company-filter").value = "all"; renderOrders(); });
-    $("#manual-scan-form").addEventListener("submit", (event) => { event.preventDefault(); processScan($("#manual-barcode").value); $("#manual-barcode").value = ""; });
-    $("#modal-close").addEventListener("click", closeModal); $("#status-modal-cancel").addEventListener("click", closeModal);
-    $$(".status-choice").forEach((button) => button.addEventListener("click", () => { if (!state.pendingBarcode) return; const result = store.updateOrderStatus(state.pendingBarcode, button.dataset.statusChoice); closeModal(); toast(`${result.barcode} أصبح ${result.status}.`, "success"); renderAll(); }));
+    $("#manual-scan-form").addEventListener("submit", (event) => { event.preventDefault(); processScan($("#manual-barcode").value, state.scanMode); $("#manual-barcode").value = ""; });
+    $$(".scan-mode").forEach((button) => button.addEventListener("click", () => setScanMode(button.dataset.scanMode)));
+    $("#modal-close").addEventListener("click", closeModal);
     $("#save-settings-button").addEventListener("click", () => { store.setThreshold($("#stuck-threshold").value); renderAll(); toast("تم حفظ إعدادات التنبيهات.", "success"); });
     $("#resolve-all-button").addEventListener("click", () => { store.getStuckOrders().forEach((order) => store.resolveAlert(order.barcode)); renderAll(); toast("تم تحديد كل التنبيهات كمُراجعة.", "success"); });
     $("#export-orders-button").addEventListener("click", () => exportCsv(store.exportRows(), "orders-2026-08-03.csv")); $("#export-all-button").addEventListener("click", () => exportCsv(store.exportRows(), "orders-2026-08-03.csv")); $("#export-report-button").addEventListener("click", () => exportCsv(store.getCompanyStats().map((c) => ({ company: c.name, totalOrders: c.total, delivered: c.delivered, returned: c.returned, deliveredRate: `${c.deliveredRate}%`, returnedRate: `${c.returnedRate}%` })), "performance-august-2026.csv"));
-    document.addEventListener("click", (event) => { const orderButton = event.target.closest("[data-order]"); if (orderButton) openOrder(orderButton.dataset.order); const resolve = event.target.closest(".resolve-alert"); if (resolve) { store.resolveAlert(resolve.dataset.barcode); renderAll(); toast("تمت مراجعة الطلب.", "success"); } const statusTrigger = event.target.closest(".modal-status-trigger"); if (statusTrigger) { closeModal(); state.pendingBarcode = statusTrigger.dataset.barcode; $("#status-modal").classList.remove("hidden"); } });
+    document.addEventListener("click", (event) => { const orderButton = event.target.closest("[data-order]"); if (orderButton) openOrder(orderButton.dataset.order); const resolve = event.target.closest(".resolve-alert"); if (resolve) { store.resolveAlert(resolve.dataset.barcode); renderAll(); toast("تمت مراجعة الطلب.", "success"); } const scanTrigger = event.target.closest(".modal-scan-trigger"); if (scanTrigger) { closeModal(); showView("scan"); setScanMode("return"); } });
     document.addEventListener("keydown", (event) => { if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") { event.preventDefault(); showView("scan"); $("#manual-barcode").focus(); } if (event.key === "Escape") closeModal(); });
     $("#orders-company-filter").innerHTML = `<option value="all">كل شركات التوصيل</option>${store.getCompanies().map((company) => `<option value="${escapeHtml(company.name)}">${escapeHtml(company.name)}</option>`).join("")}`;
   }
@@ -209,11 +236,10 @@
     if (!window.Html5Qrcode || state.scanner) return;
     try {
       state.scanner = new Html5Qrcode("reader");
-      state.scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 130 } }, (decodedText) => { processScan(decodedText); }, () => {}).catch(() => { $("#scan-status").innerHTML = `<span class="status-pulse status-pulse-muted"></span><span>تعذر تشغيل الكاميرا — استخدم الإدخال اليدوي</span>`; });
-    } catch (error) { $("#scan-status").innerHTML = `<span class="status-pulse status-pulse-muted"></span><span>تعذر تشغيل الكاميرا — استخدم الإدخال اليدوي</span>`; }
+      state.scanner.start({ facingMode: "environment" }, { fps: 10, qrbox: { width: 250, height: 130 } }, (decodedText) => { processScan(decodedText, state.scanMode); }, () => {}).catch(() => { updateScanStatus("تعذر تشغيل الكاميرا — استخدم الإدخال اليدوي", "error"); });
+    } catch (error) { updateScanStatus("تعذر تشغيل الكاميرا — استخدم الإدخال اليدوي", "error"); }
   }
   function renderAll() { renderDashboard(); renderOrders(); renderAlerts(); renderAnalytics(); renderSettings(); }
   window.RassedApp = { toast, processScan };
   setupPwaInstall(); bindEvents(); renderAll();
-  setTimeout(startScanner, 600);
 })();
