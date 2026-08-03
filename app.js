@@ -146,6 +146,43 @@
     node.querySelector("button").onclick = () => node.remove();
     setTimeout(() => node.remove(), 5000);
   }
+  let deferredInstallPrompt = null;
+  function setupPwaInstall() {
+    if (!("serviceWorker" in navigator)) return;
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+    const installButton = $("#install-button");
+    if (!installButton) return;
+    window.addEventListener("beforeinstallprompt", (event) => {
+      event.preventDefault();
+      deferredInstallPrompt = event;
+      installButton.classList.remove("hidden");
+    });
+    window.addEventListener("appinstalled", () => {
+      deferredInstallPrompt = null;
+      installButton.classList.add("hidden");
+      toast("تم تثبيت راصد على هاتفك.", "success");
+    });
+    installButton.addEventListener("click", async () => {
+      if (deferredInstallPrompt) {
+        deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        if (choice.outcome === "accepted") installButton.classList.add("hidden");
+        deferredInstallPrompt = null;
+        return;
+      }
+      const isIos = /iphone|ipad|ipod/i.test(window.navigator.userAgent);
+      if (isIos) {
+        toast("في Safari اضغط مشاركة ثم «إضافة إلى الصفحة الرئيسية».", "info");
+      } else {
+        toast("افتح قائمة المتصفح واختر «تثبيت التطبيق».", "info");
+      }
+    });
+    if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true) {
+      installButton.classList.add("hidden");
+    } else if (/iphone|ipad|ipod/i.test(window.navigator.userAgent)) {
+      installButton.classList.remove("hidden");
+    }
+  }
   function bindEvents() {
     $("#login-form").addEventListener("submit", (event) => { event.preventDefault(); $("#login-screen").classList.add("hidden"); $("#app-shell").classList.remove("hidden"); showView("dashboard"); toast("مرحبًا بك في مساحة عمل Atlas Store.", "success"); });
     $("#password-toggle").addEventListener("click", () => { const input = $("#workspace-password"); input.type = input.type === "password" ? "text" : "password"; $("#password-toggle").textContent = input.type === "password" ? "إظهار" : "إخفاء"; });
@@ -177,6 +214,6 @@
   }
   function renderAll() { renderDashboard(); renderOrders(); renderAlerts(); renderAnalytics(); renderSettings(); }
   window.RassedApp = { toast, processScan };
-  bindEvents(); renderAll();
+  setupPwaInstall(); bindEvents(); renderAll();
   setTimeout(startScanner, 600);
 })();
