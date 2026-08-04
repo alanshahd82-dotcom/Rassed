@@ -1,7 +1,3 @@
-/* Rassed data source
- * This in-memory adapter mirrors the future Google Sheets contract.
- * Replace the methods here with fetch calls later; the UI does not change.
- */
 (function () {
   const cities = ["الدار البيضاء", "الرباط", "مراكش", "طنجة", "فاس", "أكادير", "مكناس", "وجدة", "تطوان", "القنيطرة", "سلا", "الجديدة"];
   const couriers = [
