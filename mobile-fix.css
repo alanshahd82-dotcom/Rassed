@@ -1,128 +1,80 @@
 /* ============================================================
-   راصد — Mobile App Experience
-   تجربة التطبيق الحقيقي على الهاتف
+   راصد — Mobile App Experience v2
+   تحسينات آمنة بدون تغيير هيكل الصفحة
    ============================================================ */
 
 @media (max-width: 720px) {
 
-  /* ── 1. أساس التطبيق: ارتفاع كامل، بدون تمرير خارجي ── */
-  html {
-    height: 100%;
-    height: 100dvh;
-    overflow: hidden;
-    overscroll-behavior: none;
-  }
-
+  /* ── 1. تحسينات اللمس الأساسية ── */
   body {
-    height: 100%;
-    height: 100dvh;
-    overflow: hidden;
-    overscroll-behavior: none;
+    overscroll-behavior-y: none;
     -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
   }
 
-  /* منع تحديد النصوص على عناصر الواجهة */
-  .sidebar, .topbar, .mobile-bottom, .nav-link,
-  .metric-card, .panel-head, .filter-chip {
+  /* منع تحديد النصوص على عناصر التنقل */
+  .mobile-bottom,
+  .topbar,
+  .filter-chip,
+  .scan-tab {
     -webkit-user-select: none;
     user-select: none;
   }
 
-  /* ── 2. الهيكل العام: عمود رأسي مكتمل ── */
-  .app-frame {
-    min-height: 100%;
-    min-height: 100dvh;
-  }
-
-  .main-shell {
-    width: 100%;
-    margin-left: 0 !important;
-    height: 100%;
-    height: 100dvh;
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-  }
-
-  /* ── 3. الشريط العلوي مع Safe Area للـ notch ── */
-  .topbar {
-    flex-shrink: 0;
-    position: relative !important;
-    top: auto !important;
-    z-index: 15;
-    padding-top: calc(env(safe-area-inset-top, 0px) + 12px);
-    height: auto !important;
-    min-height: 56px;
-  }
-
-  /* ── 4. منطقة المحتوى القابلة للتمرير ── */
-  .content {
-    flex: 1;
-    min-height: 0;
-    overflow-y: auto;
-    overflow-x: hidden;
-    -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: contain;
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 80px) !important;
-  }
-
-  /* ── 5. شريط التنقل السفلي مع Safe Area للـ home indicator ── */
-  .mobile-bottom {
-    position: fixed !important;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    display: flex !important;
-    height: auto !important;
-    padding-top: 8px;
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 8px);
-    padding-right: 6px;
-    padding-left: 6px;
-    z-index: 25;
-    flex-shrink: 0;
-  }
-
-  /* ── 6. Sidebar على الهاتف: يظهر من الجانب كـ Drawer ── */
+  /* ── 2. Sidebar: تأثير Drawer أفضل ── */
   .sidebar {
     right: 0;
-    left: auto !important;
+    left: auto;
     transform: translateX(110%);
     transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 40;
-    border-left: 1px solid rgba(255,255,255,0.07) !important;
-    border-right: none !important;
-    box-shadow: -20px 0 50px rgba(0,0,0,0.35) !important;
   }
 
   .sidebar.open {
     transform: translateX(0);
   }
 
-  /* خلفية معتمة خلف الـ sidebar عند الفتح */
-  .sidebar.open::before {
-    content: '';
-    position: fixed;
-    inset: 0;
-    right: 100%;
-    background: rgba(0,0,0,0.45);
-    z-index: -1;
+  /* ── 3. شريط التنقل السفلي مع Safe Area (home indicator) ── */
+  .mobile-bottom {
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 7px);
+    height: calc(66px + env(safe-area-inset-bottom, 0px));
   }
 
-  /* ── 7. انتقالات Views سلسة ── */
-  .view {
-    display: none;
+  /* ضبط padding الصفحة ليحاسب ارتفاع الـ bottom nav الجديد */
+  .main-shell {
+    padding-bottom: calc(73px + env(safe-area-inset-bottom, 0px)) !important;
   }
 
+  /* ── 4. Topbar: مساحة للـ notch عند تثبيت التطبيق ── */
+  .topbar {
+    padding-top: max(12px, env(safe-area-inset-top, 12px));
+    height: calc(64px + env(safe-area-inset-top, 0px));
+  }
+
+  /* ── 5. منع تكبير الصفحة على المدخلات (iOS) ── */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* ── 6. Toast فوق شريط التنقل السفلي ── */
+  .toast-region {
+    bottom: calc(77px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* ── 7. Modal مع مراعاة Safe Area ── */
+  .modal-backdrop {
+    padding-bottom: max(12px, env(safe-area-inset-bottom, 12px));
+  }
+
+  /* ── 8. انتقالات سلسة للـ Views ── */
   .view.active {
-    display: block;
-    animation: view-enter 0.22s cubic-bezier(0.4, 0, 0.2, 1) both;
+    animation: app-view-enter 0.2s cubic-bezier(0.4, 0, 0.2, 1) both;
   }
 
-  @keyframes view-enter {
+  @keyframes app-view-enter {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(8px);
     }
     to {
       opacity: 1;
@@ -130,135 +82,51 @@
     }
   }
 
-  /* ── 8. منع تكبير المدخلات على iOS ── */
-  input,
-  select,
-  textarea {
-    font-size: 16px !important;
-  }
-
-  /* إعادة الحجم الصغير بعد الإدخال */
-  input::placeholder {
-    font-size: 14px;
-  }
-
-  /* ── 9. Toast فوق شريط التنقل ── */
-  .toast-region {
-    left: 13px !important;
-    right: 13px !important;
-    bottom: calc(env(safe-area-inset-bottom, 0px) + 80px) !important;
-    left: auto;
-  }
-
-  /* ── 10. Modal مع Safe Area ── */
-  .modal-backdrop {
-    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 12px) !important;
-  }
-
-  /* ── 11. أزرار أكبر لتجربة اللمس ── */
-  .mobile-bottom button {
-    min-width: 52px;
-    min-height: 44px;
-    padding: 4px 8px;
-    border-radius: 12px;
-  }
-
-  .mobile-bottom .mobile-scan {
-    width: 52px;
-    height: 52px;
-    margin-top: -22px;
-    border-radius: 18px;
-    border-width: 4px;
-  }
-
-  /* ── 12. تحسين مظهر الجداول على الموبايل ── */
-  .table-container {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* ── 13. تحسين أزرار الإجراءات ── */
+  /* ── 9. أزرار أكبر لتجربة لمس أفضل ── */
   .primary-btn,
   .outline-btn {
     min-height: 44px;
-    touch-action: manipulation;
   }
 
   .icon-btn,
-  .ghost-icon,
-  .row-more {
+  .ghost-icon {
     min-width: 40px;
     min-height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
   }
 
-  /* ── 14. تحسين البطاقات والمقاييس ── */
-  .metric-card {
-    border-radius: 16px;
-    transition: transform 0.15s ease;
-  }
-
+  /* ── 10. تأثير الضغط على البطاقات والأزرار ── */
   .metric-card:active {
     transform: scale(0.97);
+    transition: transform 0.1s ease;
   }
 
-  /* ── 15. تحسين زر Scan (الرئيسي) ── */
-  #submit-scan {
-    min-height: 52px;
-    font-size: 15px;
-    border-radius: 16px;
+  .filter-chip:active,
+  .scan-tab:active,
+  .mobile-bottom button:active {
+    opacity: 0.7;
+    transition: opacity 0.1s;
   }
 
-  /* ── 16. تحسين صفوف الطلبات للمس ── */
-  .scan-log-row,
-  .alert-row,
-  .history-row {
-    min-height: 60px;
-    touch-action: manipulation;
+  /* ── 11. تمرير سلس في منطقة المحتوى ── */
+  .content {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
   }
 
-  .order-link,
-  .row-more {
-    touch-action: manipulation;
-  }
-
-  /* ── 17. Scrollbar مخفي على الهاتف ── */
+  /* إخفاء Scrollbar ── */
   .content::-webkit-scrollbar {
     display: none;
   }
-  .content {
-    scrollbar-width: none;
+
+  /* ── 12. Scan button أوضح ── */
+  #submit-scan {
+    min-height: 52px;
+    border-radius: 16px;
   }
 
-  /* ── 18. تحسين مربع الإدخال اليدوي للباركود ── */
+  /* ── 13. مربع الباركود أكثر قابلية للمس ── */
   #manual-barcode {
-    border-radius: 14px;
-    padding: 14px 16px !important;
-    letter-spacing: 0.5px;
-  }
-
-  /* ── 19. تأثير الضغط على العناصر التفاعلية ── */
-  .nav-link:active,
-  .filter-chip:active,
-  .scan-tab:active {
-    transform: scale(0.96);
-    transition: transform 0.1s;
-  }
-
-  /* ── 20. الكاميرا والسكانر بارتفاع أفضل ── */
-  .scanner-viewport {
-    border-radius: 20px;
-    overflow: hidden;
-  }
-}
-
-/* ── Safe Area للأجهزة التي تحتاجها في الوضع الأفقي أيضاً ── */
-@supports (padding: max(0px)) {
-  @media (max-width: 720px) {
-    .mobile-bottom {
-      padding-right: max(6px, env(safe-area-inset-right));
-      padding-left: max(6px, env(safe-area-inset-left));
-    }
+    font-size: 16px !important;
+    padding: 14px 16px;
   }
 }
