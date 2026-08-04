@@ -1,5 +1,5 @@
-const CACHE_NAME = "rassed-audit-v2";
-const SHELL = ["./", "./index.html?v=2", "./styles.css?v=2", "./data-source.js?v=2", "./app.js?v=2", "./manifest.webmanifest", "./icons/icon.svg"];
+const CACHE_NAME = "rassed-audit-v3";
+const SHELL = ["./", "./index.html?v=2", "./styles.css?v=2", "./mobile-fix.css?v=1", "./data-source.js?v=2", "./app.js?v=2", "./manifest.webmanifest", "./icons/icon.svg"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(

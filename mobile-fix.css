@@ -1,0 +1,13 @@
+/* Mobile RTL drawer correction: the base layout is RTL, so the drawer must hide to the right. */
+@media (max-width: 720px) {
+  .sidebar {
+    right: 0;
+    left: auto;
+    transform: translateX(110%);
+    transition: transform .25s ease;
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
