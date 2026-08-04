@@ -1,14 +1,46 @@
 {
   "name": "راصد — تدقيق التوصيل",
   "short_name": "راصد",
-  "description": "نظام تدقيق وتتبع طلبات شركات التوصيل",
+  "description": "نظام تدقيق وتتبع طلبات شركات التوصيل للتجار",
   "lang": "ar",
   "dir": "rtl",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#f4f7fb",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#0b1728",
   "theme_color": "#0b1728",
   "categories": ["business", "productivity"],
-  "icons": [{"src": "./icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "./icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "تسجيل Scan",
+      "short_name": "Scan",
+      "description": "تسجيل حركة جديدة Sortie أو Retour",
+      "url": "./#scan",
+      "icons": [{ "src": "./icons/icon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "مركز التنبيهات",
+      "short_name": "تنبيهات",
+      "description": "الطلبات المتأخرة والفروقات",
+      "url": "./#alerts",
+      "icons": [{ "src": "./icons/icon.svg", "sizes": "any" }]
+    }
+  ]
 }
