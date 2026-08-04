@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0b1728" />
+    <title>راصد — اختيارات التصميم</title>
+    <style>
+      :root{font-family:Arial,"Cairo",sans-serif;color:#102033;background:#f4f7fb}
+      *{box-sizing:border-box}body{margin:0;padding:32px;min-height:100vh}
+      main{max-width:1120px;margin:auto}header{margin-bottom:28px}
+      h1{margin:0 0 8px;font-size:30px}p{margin:0;color:#6f8292;font-size:14px}
+      .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+      .card{overflow:hidden;background:#fff;border:1px solid #e0e8ee;border-radius:18px;box-shadow:0 12px 30px rgba(16,32,51,.07)}
+      .preview{height:190px;padding:17px;display:flex;gap:9px}
+      .preview i{display:block;border-radius:7px}.preview .rail{width:23%;background:#0b1728}.preview .body{flex:1;background:#f5f8fa;padding:13px}.preview .bar{height:15px;background:#fff;border-radius:5px;margin-bottom:10px}.preview .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.preview .cards i{height:45px;background:#fff}.light .rail{background:#fff;border:1px solid #dfe8ed}.light .body{background:#f6fafb}.light .cards i{border:1px solid #dfe8ed}.operations .body{background:#eef3f6}.operations .cards{grid-template-columns:repeat(2,1fr)}.operations .cards i:first-child{grid-column:1/-1;background:#dff7f1}.analytics .body{background:#0e1b2b}.analytics .bar,.analytics .cards i{background:#193149}.analytics .rail{background:#091524}
+      .copy{padding:19px}.copy h2{margin:0 0 7px;font-size:17px}.copy p{font-size:12px;line-height:1.7;min-height:42px}.tag{display:inline-block;margin-top:12px;padding:5px 8px;border-radius:6px;background:#e5f8f4;color:#087d72;font-size:10px;font-weight:700}.link{display:flex;align-items:center;justify-content:center;height:39px;margin-top:15px;border-radius:9px;background:#0b1728;color:#fff;text-decoration:none;font-size:12px;font-weight:700}.light .link{background:#20b89f}.analytics .link{background:#20b89f}
+      @media(max-width:760px){body{padding:20px 14px}.grid{grid-template-columns:1fr}.preview{height:150px}}
+    </style>
+  </head>
+  <body>
+    <main>
+      <header><h1>اختر اتجاه راصد</h1><p>ثلاثة تصورات مختلفة لنفس نظام التدقيق. افتح كل نسخة ثم اختر ما يناسب طريقة عملك.</p></header>
+      <section class="grid">
+        <article class="card light"><div class="preview"><i class="rail"></i><i class="body"><i class="bar"></i><span class="cards"><i></i><i></i><i></i></span></i></div><div class="copy"><h2>Light — مساحة هادئة</h2><p>ألوان فاتحة ومساحات مريحة للاستخدام اليومي والمراجعة السريعة.</p><span class="tag">وضوح أعلى</span><a class="link" href="./light.html">فتح التصميم</a></div></article>
+        <article class="card operations"><div class="preview"><i class="rail"></i><i class="body"><i class="bar"></i><span class="cards"><i></i><i></i><i></i></span></i></div><div class="copy"><h2>Operations — مركز التشغيل</h2><p>سجل الطلبات والمسح في المقدمة لمتابعة حركة الشحنات بسرعة.</p><span class="tag">تشغيل أسرع</span><a class="link" href="./operations.html">فتح التصميم</a></div></article>
+        <article class="card analytics"><div class="preview"><i class="rail"></i><i class="body"><i class="bar"></i><span class="cards"><i></i><i></i><i></i></span></i></div><div class="copy"><h2>Analytics — غرفة المؤشرات</h2><p>واجهة داكنة تركز على صحة السجل، الأداء، والاتجاهات اليومية.</p><span class="tag">رؤية أعمق</span><a class="link" href="./analytics.html">فتح التصميم</a></div></article>
+      </section>
+    </main>
+  </body>
+</html>

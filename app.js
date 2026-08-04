@@ -1,4 +1,6 @@
 (function () {
+  const variant = new URLSearchParams(window.location.search).get("variant");
+  if (["light", "operations", "analytics"].includes(variant)) document.documentElement.dataset.variant = variant;
   const data = window.RassedData;
   const labels = { dashboard: "نظرة عامة", scan: "تسجيل Scan", orders: "سجل الطلبات", alerts: "مركز التنبيهات", analytics: "التحليلات", reports: "التقارير", settings: "الإعدادات" };
   const state = { view: "dashboard", scanMode: "dispatch", dashboardStatus: "all", log: [] };

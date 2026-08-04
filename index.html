@@ -15,6 +15,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="./styles.css?v=2" />
     <link rel="stylesheet" href="./mobile-fix.css?v=1" />
+    <link rel="stylesheet" href="./variants.css?v=1" />
   </head>
   <body>
     <div id="toast-region" class="toast-region" aria-live="polite"></div>
@@ -75,8 +76,8 @@
     </div>
     <div class="mobile-bottom"><button data-view="dashboard" class="active">◈<span>الرئيسية</span></button><button data-view="orders">▤<span>الطلبات</span></button><button data-view="scan" class="mobile-scan">⌁</button><button data-view="alerts">△<span>تنبيهات</span><b id="mobile-alerts">7</b></button><button data-view="settings">☰<span>المزيد</span></button></div>
     <div class="modal-backdrop hidden" id="order-modal"><section class="order-modal"><button class="modal-close" id="modal-close">×</button><div id="modal-content"></div></section></div>
-    <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js?v=3", { updateViaCache: "none" }).catch(() => {});</script>
+    <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js?v=4", { updateViaCache: "none" }).catch(() => {});</script>
     <script src="./data-source.js?v=2"></script>
-    <script src="./app.js?v=2"></script>
+    <script src="./app.js?v=3"></script>
   </body>
 </html>

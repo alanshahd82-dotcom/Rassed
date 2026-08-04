@@ -1,0 +1,177 @@
+html[data-variant="light"] {
+  --navy: #fdfefe;
+  --navy-2: #f3f8f8;
+  --canvas: #f5f8fa;
+  --surface: #ffffff;
+  --ink: #183044;
+  --line: #dfe8ed;
+  --muted: #738697;
+}
+html[data-variant="light"] .sidebar {
+  color: var(--ink);
+  border-left: 1px solid var(--line);
+  box-shadow: 8px 0 26px rgba(16, 32, 51, .04);
+}
+html[data-variant="light"] .sidebar-brand strong,
+html[data-variant="light"] .nav-link,
+html[data-variant="light"] .workspace-card strong,
+html[data-variant="light"] .user-row strong {
+  color: var(--ink);
+}
+html[data-variant="light"] .sidebar-brand small,
+html[data-variant="light"] .workspace-card span,
+html[data-variant="light"] .nav-caption,
+html[data-variant="light"] .nav-link,
+html[data-variant="light"] .user-row small {
+  color: #7890a0;
+}
+html[data-variant="light"] .workspace-card {
+  background: #f2f8f8;
+  border-color: #dcece9;
+}
+html[data-variant="light"] .nav-link:hover,
+html[data-variant="light"] .nav-link.active {
+  background: #e8f7f4;
+  color: var(--teal-dark);
+}
+html[data-variant="light"] .nav-link.active:before {
+  right: -17px;
+}
+html[data-variant="light"] .nav-link kbd,
+html[data-variant="light"] .nav-link b {
+  background: #e5eef1;
+  color: #668092;
+}
+html[data-variant="light"] .nav-link b.nav-alert {
+  background: var(--red-soft);
+  color: var(--red);
+}
+html[data-variant="light"] .sidebar-footer {
+  border-color: var(--line);
+}
+html[data-variant="light"] .sync-pill {
+  background: #f2f8f8;
+}
+html[data-variant="light"] .sync-pill strong {
+  color: var(--ink);
+}
+html[data-variant="light"] .metric-primary {
+  background: #173a4d;
+  border-color: #173a4d;
+}
+
+html[data-variant="operations"] .dashboard-grid {
+  display: flex;
+  flex-direction: column;
+}
+html[data-variant="operations"] .recent-panel {
+  order: 0;
+}
+html[data-variant="operations"] .side-stack {
+  order: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+html[data-variant="operations"] .audit-banner {
+  border-right-width: 6px;
+  background: #fff5e5;
+}
+html[data-variant="operations"] .metric-grid {
+  grid-template-columns: repeat(4, minmax(150px, 1fr));
+}
+html[data-variant="operations"] .recent-panel .data-table {
+  min-width: 900px;
+}
+html[data-variant="operations"] .panel-head h2 {
+  font-size: 15px;
+}
+
+html[data-variant="analytics"] {
+  --canvas: #0e1b2b;
+  --surface: #14283d;
+  --surface-2: #193149;
+  --ink: #f4f8fb;
+  --line: #284159;
+  --muted: #9bb0c2;
+}
+html[data-variant="analytics"] .topbar {
+  background: #101f31;
+  border-color: #243b52;
+}
+html[data-variant="analytics"] .topbar-context strong,
+html[data-variant="analytics"] .topbar-user b,
+html[data-variant="analytics"] .view-header h1,
+html[data-variant="analytics"] .panel-head h2,
+html[data-variant="analytics"] .data-table td,
+html[data-variant="analytics"] .metric-card {
+  color: var(--ink);
+}
+html[data-variant="analytics"] .view-header p,
+html[data-variant="analytics"] .metric-top,
+html[data-variant="analytics"] .panel-head p,
+html[data-variant="analytics"] .data-table th,
+html[data-variant="analytics"] .last-action,
+html[data-variant="analytics"] .duration {
+  color: #9bb0c2;
+}
+html[data-variant="analytics"] .panel,
+html[data-variant="analytics"] .metric-card {
+  background: var(--surface);
+  border-color: var(--line);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, .15);
+}
+html[data-variant="analytics"] .metric-primary {
+  background: #20b89f;
+  border-color: #20b89f;
+}
+html[data-variant="analytics"] .metric-primary .metric-top,
+html[data-variant="analytics"] .metric-primary .metric-bottom,
+html[data-variant="analytics"] .metric-primary > strong {
+  color: #062d2b;
+}
+html[data-variant="analytics"] .data-table th {
+  background: #102237;
+  border-color: #284159;
+}
+html[data-variant="analytics"] .data-table td {
+  border-color: #213950;
+}
+html[data-variant="analytics"] .data-table tbody tr:hover {
+  background: #193149;
+}
+html[data-variant="analytics"] .search-field,
+html[data-variant="analytics"] .orders-toolbar select,
+html[data-variant="analytics"] .period-select {
+  background: #102237;
+  border-color: #2c4861;
+  color: #d9e7ef;
+}
+html[data-variant="analytics"] .health-ring:after,
+html[data-variant="analytics"] .donut:after {
+  background: var(--surface);
+}
+html[data-variant="analytics"] .health-copy,
+html[data-variant="analytics"] .donut-legend span,
+html[data-variant="analytics"] .chart-y,
+html[data-variant="analytics"] .chart-x {
+  color: #9bb0c2;
+}
+html[data-variant="analytics"] .grid-lines {
+  background: repeating-linear-gradient(to bottom, #284159 0, #284159 1px, transparent 1px, transparent 25%);
+}
+html[data-variant="analytics"] .mobile-bottom {
+  background: rgba(16, 31, 49, .96);
+  border-color: #284159;
+}
+
+@media (max-width: 720px) {
+  html[data-variant="operations"] .side-stack {
+    display: flex;
+  }
+  html[data-variant="operations"] .metric-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  html[data-variant="analytics"] .sidebar {
+    background: #0b1728;
+  }
+}
