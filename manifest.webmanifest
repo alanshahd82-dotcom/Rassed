@@ -1,0 +1,14 @@
+{
+  "name": "راصد — تدقيق التوصيل",
+  "short_name": "راصد",
+  "description": "نظام تدقيق وتتبع طلبات شركات التوصيل",
+  "lang": "ar",
+  "dir": "rtl",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f4f7fb",
+  "theme_color": "#0b1728",
+  "categories": ["business", "productivity"],
+  "icons": [{"src": "./icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]
+}
